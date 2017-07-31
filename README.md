@@ -1,18 +1,20 @@
 # PhDelay
 
-To start your Phoenix app:
+```
+Проект для проверки эффекта, когда феникс не задерживал ответ на два одинаковых запроса на 20 секунд
 
-  * Install dependencies with `mix deps.get`
-  * Start Phoenix endpoint with `mix phoenix.server`
+mix deps.get
+MIX_ENV=dev mix compile
+MIX_ENV=dev PORT=4000 iex -S mix phoenix.server
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+и открыть две странички в браузере
+http://127.0.0.1:4000/delay_test?id=12345&sid=67890
+http://127.0.0.1:4000/delay_test?id=12345&sid=67890
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+в логе второй ввход в index будет спустя 20с
 
-## Learn more
+Причина была в браузере Google Chrome, который, видимо, не делает такой же запрос с других своих закладок.
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+Если же запустить запрос из консоли или из двух браузеров, то такой проблемы нет
+
+curl -Ov "http://127.0.0.1:4000/delay_test?id=12345&sid=67890" & sleep 5; curl -Ov "http://127.0.0.1:4000/delay_test?id=12345&sid=67890" &
